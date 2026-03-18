@@ -35,5 +35,7 @@ cloudflare:
     secret-key: ${R2_SECRET_KEY}
     endpoint: ${R2_ENDPOINT}
     bucket: ${R2_BUCKET_NAME}
-
+app:
+  jwt:
+    secret: kujahsbedyhku123gh43uhg138!@#@asdhuob5i2324tkfsr31bh981239pu
 
