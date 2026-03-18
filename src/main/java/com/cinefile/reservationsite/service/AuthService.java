@@ -7,6 +7,7 @@ import com.cinefile.reservationsite.model.User;
 import com.cinefile.reservationsite.repository.UserRepository;
 import com.cinefile.reservationsite.security.UserPrincipal;
 import jakarta.persistence.EntityExistsException;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,10 +28,10 @@ public class AuthService {
         if (userRepository.existsByEmailIgnoreCase(email)) {
             throw new EntityExistsException("Email już zajęty.");
         }
-
-        User user = new User();
-        user.setEmail(email);
-        user.setPasswordHash(passwordEncoder.encode(req.password()));
+        var user = User.builder()
+                .email(email)
+                .passwordHash(passwordEncoder.encode(req.password()))
+                .build();
         userRepository.save(user);
     }
 
@@ -40,6 +41,7 @@ public class AuthService {
         );
 
         var principal = (UserPrincipal) auth.getPrincipal();
+        assert principal != null;
         String token = jwtService.generateToken(principal.getId(), principal.getUsername());
         return new AuthResponse(token);
     }

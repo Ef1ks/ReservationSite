@@ -2,6 +2,7 @@ package com.cinefile.reservationsite.service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class JwtService {
 
@@ -18,7 +20,7 @@ public class JwtService {
 
     public JwtService(
             @Value("${app.jwt.secret}") String secret,
-            @Value("${app.jwt.expiration-minutes}") long expirationMinutes
+            @Value("${app.jwt.expiration-time}") long expirationMinutes
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMinutes = expirationMinutes;
@@ -28,6 +30,8 @@ public class JwtService {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(expirationMinutes * 60);
 
+
+        log.info("Generating JWT token for userId: {} and email: {}", userId, email);
         return Jwts.builder()
                 .setSubject(email)               // standard claim
                 .claim("uid", userId)            // custom claim
