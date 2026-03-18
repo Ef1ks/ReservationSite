@@ -37,5 +37,5 @@ cloudflare:
     bucket: ${R2_BUCKET_NAME}
 app:
   jwt:
-    secret: kujahsbedyhku123gh43uhg138!@#@asdhuob5i2324tkfsr31bh981239pu
+    secret: ${JWT_SECRET}
 
