@@ -1,5 +1,6 @@
 package com.cinefile.reservationsite.service;
 
+import com.cinefile.reservationsite.model.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,13 +25,14 @@ public class JwtService {
         this.expirationMinutes = expirationMinutes;
     }
 
-    public String generateToken(Long userId, String email) {
+    public String generateToken(Long userId, String email, Role role) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(expirationMinutes * 60);
 
         return Jwts.builder()
                 .setSubject(email)               // standard claim
-                .claim("uid", userId)            // custom claim
+                .claim("uid", userId)
+                .claim("role", role)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(exp))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -54,5 +56,8 @@ public class JwtService {
 
     public String extractEmail(Claims claims) {
         return claims.getSubject();
+    }
+    public String extractRole(Claims claims) {
+        return claims.get("role", String.class);
     }
 }

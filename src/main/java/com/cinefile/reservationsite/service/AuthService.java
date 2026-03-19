@@ -3,6 +3,7 @@ package com.cinefile.reservationsite.service;
 import com.cinefile.reservationsite.dto.AuthResponse;
 import com.cinefile.reservationsite.dto.LoginRequest;
 import com.cinefile.reservationsite.dto.RegisterRequest;
+import com.cinefile.reservationsite.model.Role;
 import com.cinefile.reservationsite.model.User;
 import com.cinefile.reservationsite.repository.UserRepository;
 import com.cinefile.reservationsite.security.UserPrincipal;
@@ -31,6 +32,7 @@ public class AuthService {
         User user = new User();
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(req.password()));
+        user.setRole(Role.ROLE_USER);
         userRepository.save(user);
     }
 
@@ -40,7 +42,11 @@ public class AuthService {
         );
 
         var principal = (UserPrincipal) auth.getPrincipal();
-        String token = jwtService.generateToken(principal.getId(), principal.getUsername());
+        String token = jwtService.generateToken(
+                principal.getId(),
+                principal.getUsername(),
+                principal.getRole()
+        );
         return new AuthResponse(token);
     }
 }
