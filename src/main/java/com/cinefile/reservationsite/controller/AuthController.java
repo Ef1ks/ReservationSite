@@ -1,4 +1,4 @@
-package com.cinefile.reservationsite.api;
+package com.cinefile.reservationsite.controller;
 
 import com.cinefile.reservationsite.dto.AuthResponse;
 import com.cinefile.reservationsite.dto.LoginRequest;

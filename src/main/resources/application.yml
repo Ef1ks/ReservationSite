@@ -35,8 +35,9 @@ cloudflare:
     secret-key: ${R2_SECRET_KEY}
     endpoint: ${R2_ENDPOINT}
     bucket: ${R2_BUCKET_NAME}
+    public-url: ${R2_PUBLIC_ADDRESS}
 app:
   jwt:
     secret: ${JWT_SECRET}
-    expiration-minutes: ${JWT_EXPIRATION:60}
+    expiration-time: ${JWT_TIME}
 
