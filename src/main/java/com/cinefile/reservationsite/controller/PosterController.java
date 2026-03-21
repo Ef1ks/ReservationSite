@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @Slf4j
 @RestController
-@RequestMapping("/cinema/posters")
+@RequestMapping("/api/posters")
 @RequiredArgsConstructor
 public class PosterController {
     private final PosterService posterService;
