@@ -7,7 +7,9 @@ import com.cinefile.reservationsite.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.text.Normalizer;
 import java.util.List;
 
 @Slf4j
@@ -17,10 +19,18 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
+    @Transactional
     public void createMovie(CreateMovieRequest request) {
+        String searchKey = normalizeTitle(request.getTitle());
+        if (movieRepository.existsBySearchKey(searchKey)) {
+            log.error("Film już istnieje");
+            return;
+        }
+
         Movie movie = Movie.builder()
                 .title(request.getTitle())
                 .posterUrl(request.getPosterUrl())
+                .searchKey(searchKey)
                 .build();
 
         movieRepository.save(movie);
@@ -29,5 +39,17 @@ public class MovieService {
 
     public List<MovieLightDto> getMoviesForHomePage() {
         return movieRepository.findAllLightMovies();
+    }
+
+    private String normalizeTitle(String title) {
+        if (title == null || title.isBlank()) {
+            return "";
+        }
+        String preProcessed = title.replace("ł", "l").replace("Ł", "L");
+        String normalized = Normalizer.normalize(preProcessed, Normalizer.Form.NFD);
+        return normalized
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .toLowerCase()
+                .replaceAll("[^a-z0-9]", "");
     }
 }
