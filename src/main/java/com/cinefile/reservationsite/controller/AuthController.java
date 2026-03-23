@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+//TODO think about login system for admins . More profesional way is to add new endpoints for admins but we can do it with frontend form
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
