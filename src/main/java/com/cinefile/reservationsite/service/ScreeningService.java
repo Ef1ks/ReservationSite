@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +28,16 @@ public class ScreeningService {
         screeningRepository.save(screening);
     }
 
+
+
+    @Transactional
+    public List<ScreeningRes>getScreeningsBetween(LocalDateTime startDate,LocalDateTime endDate){
+        return screeningRepository.findBystartTimeBetween(startDate,endDate)
+                .stream()
+                .map(ScreeningService::toResponse)
+                .toList();
+    }
+
     @Transactional
     public List<ScreeningRes> getScreenings() {
 
@@ -35,6 +46,7 @@ public class ScreeningService {
                 .map(ScreeningService::toResponse)
                 .toList();
     }
+
 
     private static ScreeningRes toResponse(Screening b) {
         return new ScreeningRes(

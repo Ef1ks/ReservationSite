@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,12 @@ public class ScreeningController {
     @PostMapping
     public List<ScreeningRes> getScreenings( ) {
         return screeningService.getScreenings();
+    }
+
+    @GetMapping
+    public List<ScreeningRes> getScreeningsBetween(@RequestParam LocalDateTime from,
+                                                   @RequestParam LocalDateTime to){
+        return screeningService.getScreeningsBetween(from,to);
     }
 
 }
