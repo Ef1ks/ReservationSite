@@ -18,16 +18,16 @@ public class ScreeningController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody ScreeningRes req) {
+    public void addScreening(@Valid @RequestBody ScreeningRes req) {
         screeningService.addScreening(req);
     }
 
-    @PostMapping
+    @GetMapping
     public List<ScreeningRes> getScreenings( ) {
         return screeningService.getScreenings();
     }
 
-    @GetMapping
+    @GetMapping("/btw")
     public List<ScreeningRes> getScreeningsBetween(@RequestParam LocalDateTime from,
                                                    @RequestParam LocalDateTime to){
         return screeningService.getScreeningsBetween(from,to);
