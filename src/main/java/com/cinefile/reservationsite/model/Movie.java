@@ -27,6 +27,9 @@ public class Movie {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    @Column(name = "search_key", unique = true)
+    private String searchKey;
+
     @PrePersist
     @PreUpdate
     private void generateSlug() {
