@@ -4,12 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+//TODO Add slugs if necessesary idk
 @Entity
-@Data
+@Setter
+@Getter
 public class Screening {
     @Id
     @GeneratedValue

@@ -4,6 +4,7 @@ import com.cinefile.reservationsite.dto.CreateMovieRequest;
 import com.cinefile.reservationsite.dto.MovieLightDto;
 import com.cinefile.reservationsite.model.Movie;
 import com.cinefile.reservationsite.repository.MovieRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
