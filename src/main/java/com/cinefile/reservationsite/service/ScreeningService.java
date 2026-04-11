@@ -25,15 +25,20 @@ public class ScreeningService {
     public void addScreening(ScreeningRes screeningRes) {
 
         Screening screening = new Screening();
-        screening.setHall(hallRepository.getReferenceById(screeningRes.hallId()));
-        screening.setMovie(movieRepository.getReferenceById(screeningRes.movieId()));
-        screening.setStartTime(screeningRes.startTime());
-
-        boolean exists=screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(screeningRes.startTime(),screeningRes.hallId(),screeningRes.movieId());
 
         LocalDateTime start = screeningRes.startTime();
         int duration = movieRepository.getReferenceById(screeningRes.movieId()).getLength();
         LocalDateTime end = start.plusMinutes(duration);
+
+        screening.setHall(hallRepository.getReferenceById(screeningRes.hallId()));
+        screening.setMovie(movieRepository.getReferenceById(screeningRes.movieId()));
+        screening.setStartTime(screeningRes.startTime());
+        screening.setEndTime(end);
+
+        boolean exists=screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(screeningRes.startTime(),screeningRes.hallId(),screeningRes.movieId());
+
+
+
         boolean hallIsOccupied=screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(
                 screeningRes.hallId(),
                 end,
