@@ -10,4 +10,6 @@ public class CreateMovieRequest {
     private String title;
     @NotBlank(message = "Link do plakatu jest wymagany")
     private String posterUrl;
+    @NotBlank(message = "Długość filmu jest wymagana")
+    private int lenght;
 }

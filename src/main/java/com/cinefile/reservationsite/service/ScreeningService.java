@@ -5,13 +5,15 @@ import com.cinefile.reservationsite.model.Screening;
 import com.cinefile.reservationsite.repository.HallRepository;
 import com.cinefile.reservationsite.repository.MovieRepository;
 import com.cinefile.reservationsite.repository.ScreeningRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScreeningService {
@@ -21,10 +23,27 @@ public class ScreeningService {
 
     @Transactional
     public void addScreening(ScreeningRes screeningRes) {
+
         Screening screening = new Screening();
         screening.setHall(hallRepository.getReferenceById(screeningRes.hallId()));
         screening.setMovie(movieRepository.getReferenceById(screeningRes.movieId()));
         screening.setStartTime(screeningRes.startTime());
+
+        boolean exists=screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(screeningRes.startTime(),screeningRes.hallId(),screeningRes.movieId());
+
+        LocalDateTime start = screeningRes.startTime();
+        int duration = movieRepository.getReferenceById(screeningRes.movieId()).getLength();
+        LocalDateTime end = start.plusMinutes(duration);
+        boolean hallIsOccupied=screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(
+                screeningRes.hallId(),
+                end,
+                start
+        );
+
+        if(exists || hallIsOccupied){
+            log.error("Film już istnieje lub hala jest zajęta");
+            throw new EntityExistsException(" już zajęty.");
+        }
         screeningRepository.save(screening);
     }
 
