@@ -1,7 +1,5 @@
 package com.cinefile.reservationsite.service;
 
-import com.cinefile.reservationsite.dto.PosterPost;
-import com.cinefile.reservationsite.model.Movie;
 import com.cinefile.reservationsite.repository.MovieRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ public class PosterService {
     private String bucketName;
     @Value("${cloudflare.r2.public-url}")
     private String publicUrl;
+
     @Transactional
     public String uploadPoster(MultipartFile file, Principal principal) {
         String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();

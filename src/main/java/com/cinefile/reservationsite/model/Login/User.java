@@ -1,4 +1,5 @@
-package com.cinefile.reservationsite.model;
+package com.cinefile.reservationsite.model.Login;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,15 +14,19 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name="password_hash" , nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "active_account", nullable = true)
+    private boolean activeAccount = false;
+
 
 }

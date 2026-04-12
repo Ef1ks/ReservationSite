@@ -1,7 +1,10 @@
 package com.cinefile.reservationsite.service;
 
-import com.cinefile.reservationsite.model.Role;
-import io.jsonwebtoken.*;
+import com.cinefile.reservationsite.model.Login.Role;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +64,7 @@ public class JwtService {
     public String extractEmail(Claims claims) {
         return claims.getSubject();
     }
+
     public String extractRole(Claims claims) {
         return claims.get("role", String.class);
     }

@@ -1,4 +1,16 @@
 spring:
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 14d695201a7291
+    password: 4511791f9f5941
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   application:
     name: ReservationSite
   flyway:
@@ -40,4 +52,6 @@ app:
   jwt:
     secret: ${JWT_SECRET}
     expiration-time: ${JWT_TIME}
+  frontend:
+    url: http://localhost:5173 #lokalne ip
 
