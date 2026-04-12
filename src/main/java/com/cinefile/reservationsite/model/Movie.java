@@ -20,6 +20,9 @@ public class Movie {
 
     @Column(nullable = false)
     private String title;
+    //TODO dodac to do migracji , nie zrobilem tego teraz bo bez sensu tworzcy migracje z jednym zapytaniem
+    @Column(nullable = false)
+    private int length;
 
     @Column(name = "poster_url", nullable = false)
     private String posterUrl;
