@@ -24,4 +24,6 @@ public class Screening {
     private Hall hall;
 
     private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 }
