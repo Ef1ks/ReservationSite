@@ -1,8 +1,8 @@
 package com.cinefile.reservationsite.service;
 
-import com.cinefile.reservationsite.dto.AuthResponse;
-import com.cinefile.reservationsite.dto.LoginRequest;
-import com.cinefile.reservationsite.dto.RegisterRequest;
+import com.cinefile.reservationsite.dto.login.AuthResponse;
+import com.cinefile.reservationsite.dto.login.LoginRequest;
+import com.cinefile.reservationsite.dto.login.RegisterRequest;
 import com.cinefile.reservationsite.model.Role;
 import com.cinefile.reservationsite.model.User;
 import com.cinefile.reservationsite.repository.UserRepository;

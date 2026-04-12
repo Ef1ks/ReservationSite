@@ -1,4 +1,4 @@
-package com.cinefile.reservationsite.controller.admin;
+package com.cinefile.reservationsite.controller;
 
 import com.cinefile.reservationsite.dto.ScreeningRes;
 import com.cinefile.reservationsite.service.ScreeningService;

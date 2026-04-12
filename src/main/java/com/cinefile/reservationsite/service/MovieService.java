@@ -1,6 +1,6 @@
 package com.cinefile.reservationsite.service;
 
-import com.cinefile.reservationsite.dto.CreateMovieRequest;
+import com.cinefile.reservationsite.dto.movie.CreateMovieRequest;
 import com.cinefile.reservationsite.dto.MovieLightDto;
 import com.cinefile.reservationsite.model.Movie;
 import com.cinefile.reservationsite.repository.MovieRepository;

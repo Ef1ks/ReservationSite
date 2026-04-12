@@ -1,4 +1,4 @@
-package com.cinefile.reservationsite.dto;
+package com.cinefile.reservationsite.dto.movie;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
