@@ -1,4 +1,4 @@
-package com.cinefile.reservationsite.model;
+package com.cinefile.reservationsite.model.Login;
 
 public enum Role {
     ROLE_USER,
