@@ -1,4 +1,6 @@
 package com.cinefile.reservationsite.model;
+
+import com.cinefile.reservationsite.model.Login.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

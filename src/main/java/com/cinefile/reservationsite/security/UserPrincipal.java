@@ -1,14 +1,17 @@
 package com.cinefile.reservationsite.security;
 
 
-import com.cinefile.reservationsite.model.Role;
+import com.cinefile.reservationsite.model.Login.Role;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+
 @Getter
+@RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
     private final Long id;
@@ -16,21 +19,38 @@ public class UserPrincipal implements UserDetails {
     private final String passwordHash;
     private final Role role;
 
-    public UserPrincipal(Long id, String email, String passwordHash,Role role) {
-        this.id = id;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.role = role;
-    }
-
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> role.name());
     }
-    @Override public String getPassword() { return passwordHash; }
-    @Override public String getUsername() { return email; }
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
