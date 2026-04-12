@@ -1,8 +1,9 @@
 package com.cinefile.reservationsite.controller;
 
+import com.cinefile.reservationsite.dto.RegisterRequest;
 import com.cinefile.reservationsite.dto.login.AuthResponse;
 import com.cinefile.reservationsite.dto.login.LoginRequest;
-import com.cinefile.reservationsite.dto.login.RegisterRequest;
+import com.cinefile.reservationsite.dto.login.VerifyEmailRequest;
 import com.cinefile.reservationsite.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
