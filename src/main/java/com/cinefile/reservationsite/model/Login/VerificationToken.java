@@ -25,5 +25,4 @@ public class VerificationToken {
     private User user;
     @Column(nullable = false)
     private Instant expirationDate;
-    private boolean used = false;
 }

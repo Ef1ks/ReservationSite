@@ -22,7 +22,7 @@ public class Movie {
     private String title;
     //TODO dodac to do migracji , nie zrobilem tego teraz bo bez sensu tworzcy migracje z jednym zapytaniem
     @Column(nullable = false)
-    private int length;
+    private int duration;
 
     @Column(name = "poster_url", nullable = false)
     private String posterUrl;

@@ -28,5 +28,8 @@ public class User {
     @Column(name = "active_account", nullable = true)
     private boolean activeAccount = false;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private VerificationToken verificationToken;
+
 
 }
