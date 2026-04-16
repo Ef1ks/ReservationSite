@@ -1,4 +1,5 @@
 package com.cinefile.reservationsite.service;
+
 import com.cinefile.reservationsite.dto.ScreeningRes;
 import com.cinefile.reservationsite.model.Hall;
 import com.cinefile.reservationsite.model.Movie;
@@ -47,7 +48,7 @@ class ScreeningServiceTest {
 
         movie = new Movie();
         movie.setId(2L);
-        movie.setLength(60);
+        movie.setDuration(60);
     }
 
     @Test
@@ -127,7 +128,7 @@ class ScreeningServiceTest {
 
         Movie movie = new Movie();
         movie.setId(1L);
-        movie.setLength(120);
+        movie.setDuration(120);
 
         when(hallRepository.getReferenceById(1L)).thenReturn(hall);
         when(movieRepository.getReferenceById(1L)).thenReturn(movie);
@@ -159,7 +160,7 @@ class ScreeningServiceTest {
 
         Movie movie = new Movie();
         movie.setId(1L);
-        movie.setLength(120);
+        movie.setDuration(120);
 
         when(hallRepository.getReferenceById(1L)).thenReturn(hall);
         when(movieRepository.getReferenceById(1L)).thenReturn(movie);
@@ -180,7 +181,6 @@ class ScreeningServiceTest {
 
         verify(screeningRepository, never()).save(any());
     }
-
 
 
 }

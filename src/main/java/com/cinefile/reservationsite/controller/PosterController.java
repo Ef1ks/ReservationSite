@@ -1,5 +1,6 @@
 package com.cinefile.reservationsite.controller;
 
+import com.cinefile.reservationsite.dto.PosterLinkDto;
 import com.cinefile.reservationsite.service.PosterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class PosterController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public String uploadPoster(@RequestPart("file") MultipartFile file, Principal principal) {
+    public PosterLinkDto uploadPoster(@RequestPart("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Plik nie może być pusty!");
         }

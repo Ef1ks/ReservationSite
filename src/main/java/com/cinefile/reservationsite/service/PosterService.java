@@ -1,5 +1,6 @@
 package com.cinefile.reservationsite.service;
 
+import com.cinefile.reservationsite.dto.PosterLinkDto;
 import com.cinefile.reservationsite.repository.MovieRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class PosterService {
     private String publicUrl;
 
     @Transactional
-    public String uploadPoster(MultipartFile file, Principal principal) {
+    public PosterLinkDto uploadPoster(MultipartFile file, Principal principal) {
         String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -40,7 +41,8 @@ public class PosterService {
             if (principal != null) {
                 log.info("File uploaded successfully by {}", principal.getName());
             }
-            return publicUrl + "/" + fileName;
+            String posterUrl = publicUrl + "/" + fileName;
+            return new PosterLinkDto(posterUrl);
 
         } catch (Exception e) {
             log.error("Error while uploading file to S3: {}", e.getMessage(), e);
