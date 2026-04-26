@@ -1,9 +1,6 @@
 package com.cinefile.reservationsite.service;
 
-import com.cinefile.reservationsite.dto.RegisterRequest;
-import com.cinefile.reservationsite.dto.login.AuthResponse;
-import com.cinefile.reservationsite.dto.login.LoginRequest;
-import com.cinefile.reservationsite.dto.login.VerifyEmailRequest;
+import com.cinefile.reservationsite.dto.login.*;
 import com.cinefile.reservationsite.model.Login.Role;
 import com.cinefile.reservationsite.model.Login.User;
 import com.cinefile.reservationsite.model.Login.VerificationToken;
@@ -15,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,18 +59,24 @@ public class AuthService {
 
     }
 
-    public AuthResponse login(LoginRequest req) {
-        var auth = authenticationManager.authenticate(
+    public AuthResult login(LoginRequest req) {
+
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email(), req.password())
         );
 
-        var principal = (UserPrincipal) auth.getPrincipal();
-        String token = jwtService.generateToken(
+        String jwt = jwtService.generateToken(authentication);
+
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+
+        assert principal != null;
+        UserProfileDTO profileDTO = new UserProfileDTO(
                 principal.getId(),
                 principal.getUsername(),
-                principal.getRole()
+                principal.getAuthorities().iterator().next().getAuthority()
         );
-        return new AuthResponse(token);
+
+        return new AuthResult(jwt, profileDTO);
     }
 
     @Transactional

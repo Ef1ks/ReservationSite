@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,13 +22,21 @@ public class ScreeningService {
     final private HallRepository hallRepository;
     final private MovieRepository movieRepository;
 
+    private static ScreeningRes toResponse(Screening b) {
+        return new ScreeningRes(
+                b.getMovie().getId(),
+                b.getHall().getId(),
+                b.getStartTime()
+        );
+    }
+
     @Transactional
     public void addScreening(ScreeningRes screeningRes) {
 
         Screening screening = new Screening();
 
         LocalDateTime start = screeningRes.startTime();
-        int duration = movieRepository.getReferenceById(screeningRes.movieId()).getLength();
+        int duration = movieRepository.getReferenceById(screeningRes.movieId()).getDuration();
         LocalDateTime end = start.plusMinutes(duration);
 
         screening.setHall(hallRepository.getReferenceById(screeningRes.hallId()));
@@ -35,28 +44,25 @@ public class ScreeningService {
         screening.setStartTime(screeningRes.startTime());
         screening.setEndTime(end);
 
-        boolean exists=screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(screeningRes.startTime(),screeningRes.hallId(),screeningRes.movieId());
+        boolean exists = screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(screeningRes.startTime(), screeningRes.hallId(), screeningRes.movieId());
 
 
-
-        boolean hallIsOccupied=screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(
+        boolean hallIsOccupied = screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(
                 screeningRes.hallId(),
                 end,
                 start
         );
 
-        if(exists || hallIsOccupied){
+        if (exists || hallIsOccupied) {
             log.error("Film już istnieje lub hala jest zajęta");
             throw new EntityExistsException(" już zajęty.");
         }
         screeningRepository.save(screening);
     }
 
-
-
     @Transactional
-    public List<ScreeningRes>getScreeningsBetween(LocalDateTime startDate,LocalDateTime endDate){
-        return screeningRepository.findBystartTimeBetween(startDate,endDate)
+    public List<ScreeningRes> getScreeningsBetween(LocalDateTime startDate, LocalDateTime endDate) {
+        return screeningRepository.findBystartTimeBetween(startDate, endDate)
                 .stream()
                 .map(ScreeningService::toResponse)
                 .toList();
@@ -69,14 +75,5 @@ public class ScreeningService {
                 .stream()
                 .map(ScreeningService::toResponse)
                 .toList();
-    }
-
-
-    private static ScreeningRes toResponse(Screening b) {
-        return new ScreeningRes(
-                b.getMovie().getId(),
-                b.getHall().getId(),
-                b.getStartTime()
-        );
     }
 }

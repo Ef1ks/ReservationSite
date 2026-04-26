@@ -1,10 +1,14 @@
 package com.cinefile.reservationsite.security;
 
+import com.cinefile.reservationsite.model.Login.Role;
 import com.cinefile.reservationsite.service.JwtService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,48 +30,52 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        String token = extractToken(request);
 
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7);
-
         try {
             var jws = jwtService.parseAndValidate(token);
-            Claims claims = jws.getBody();
-
-            String email = jwtService.extractEmail(claims);
-            String role = jwtService.extractRole(claims);
+            Claims claims = jws.getPayload();
+            String email = claims.getSubject();
+            Role role = jwtService.extractRole(claims);
+            Long userId = jwtService.extractUserId(claims);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                var authority = new SimpleGrantedAuthority(role);
+                var authority = new SimpleGrantedAuthority(role.toString());
+                UserPrincipal user = new UserPrincipal(userId, email, "", role);
 
                 var authToken = new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        List.of(authority)
+                        user, null, List.of(authority)
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
             filterChain.doFilter(request, response);
 
-        } catch (JwtException | IllegalArgumentException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Invalid or expired token\"}");
-            log.error("Invalid or expired token", ex);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

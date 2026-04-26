@@ -4,11 +4,11 @@ import com.cinefile.reservationsite.dto.movie.CreateMovieRequest;
 import com.cinefile.reservationsite.dto.MovieLightDto;
 import com.cinefile.reservationsite.model.Movie;
 import com.cinefile.reservationsite.repository.MovieRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 
 import java.text.Normalizer;
 import java.util.List;
@@ -24,15 +24,14 @@ public class MovieService {
     public void createMovie(CreateMovieRequest request) {
         String searchKey = normalizeTitle(request.getTitle());
         if (movieRepository.existsBySearchKey(searchKey)) {
-            log.error("Film już istnieje");
-            return;
+            throw new EntityExistsException("Film już istnieje!");
         }
 
         Movie movie = Movie.builder()
                 .title(request.getTitle())
                 .posterUrl(request.getPosterUrl())
                 .searchKey(searchKey)
-                .length(request.getLenght())
+                .duration(request.getDuration())
                 .build();
 
         movieRepository.save(movie);

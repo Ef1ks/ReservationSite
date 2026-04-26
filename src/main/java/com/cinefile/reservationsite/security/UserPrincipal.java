@@ -3,8 +3,10 @@ package com.cinefile.reservationsite.security;
 
 import com.cinefile.reservationsite.model.Login.Role;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -21,7 +23,7 @@ public class UserPrincipal implements UserDetails {
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> role.name());
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -30,6 +32,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
+    @NonNull
     public String getUsername() {
         return email;
     }
