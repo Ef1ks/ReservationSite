@@ -4,18 +4,22 @@ import com.cinefile.reservationsite.dto.login.LoginRequest;
 import com.cinefile.reservationsite.dto.login.RegisterRequest;
 import com.cinefile.reservationsite.dto.login.UserProfileDTO;
 import com.cinefile.reservationsite.dto.login.VerifyEmailRequest;
+import com.cinefile.reservationsite.security.UserPrincipal;
 import com.cinefile.reservationsite.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 //TODO think about login system for admins . More profesional way is to add new endpoints for admins but we can do it with frontend form
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -42,6 +46,8 @@ public class AuthController {
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
+        log.info("User logged in: {}", authResult.userProfile().email());
+
         return authResult.userProfile();
     }
 
@@ -58,10 +64,20 @@ public class AuthController {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
-    
+
     @PostMapping("/verify")
     @ResponseStatus(HttpStatus.OK)
     public void verify(@RequestBody VerifyEmailRequest req) {
         authService.verify(req);
+    }
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public UserProfileDTO getMe(@AuthenticationPrincipal UserPrincipal user) {
+        UserProfileDTO profile = new UserProfileDTO(
+                user.getId(), user.getUsername(), user.getRole().toString()
+        );
+        log.info("User profile requested: {}", profile.email());
+        return profile;
     }
 }

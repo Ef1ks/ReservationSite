@@ -48,10 +48,10 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/admin_panel/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/verify", "/api/movies/getMovies").permitAll()
+                        .requestMatchers("/admin/**").hasRole("USER")
                         .requestMatchers("/cinema/**").hasRole("USER")
-                        .requestMatchers("/test/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/me").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
