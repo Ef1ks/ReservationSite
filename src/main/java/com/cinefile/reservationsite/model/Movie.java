@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.text.Normalizer;
+import java.util.UUID;
 
 @Entity
 @Table(name = "movies")
@@ -15,17 +16,35 @@ import java.text.Normalizer;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String title;
-    //TODO dodac to do migracji , nie zrobilem tego teraz bo bez sensu tworzcy migracje z jednym zapytaniem
+
     @Column(nullable = false)
     private int duration;
 
     @Column(name = "poster_url", nullable = false)
     private String posterUrl;
+
+    @Column(name = "trailer_url")
+    private String trailerUrl;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "release_date")
+    private String releaseDate;
+    @Column(name = "director")
+    private String director;
+    @Column(name = "genre")
+    private String genre;
+    @Column(name = "language")
+    private String originalLanguage;
+    @Column(name = "imdb_rating")
+    private String imdbRating;
+    
 
     @Column(nullable = false, unique = true)
     private String slug;

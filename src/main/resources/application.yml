@@ -55,3 +55,7 @@ app:
   frontend:
     url: http://localhost:5173 #lokalne ip
 
+omdb:
+  api:
+    key: ${OMBD_API_KEY}
+    url: ${OMBD_API_URL}
