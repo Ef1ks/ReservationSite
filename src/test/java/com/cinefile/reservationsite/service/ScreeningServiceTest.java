@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,7 +48,7 @@ class ScreeningServiceTest {
         hall.setId(1L);
 
         movie = new Movie();
-        movie.setId(2L);
+        movie.setId(new UUID(1L, 1L));
         movie.setDuration(60);
     }
 
@@ -121,20 +122,20 @@ class ScreeningServiceTest {
         // given
         LocalDateTime start = LocalDateTime.now();
 
-        ScreeningRes dto = new ScreeningRes(1L, 1L, start);
+        ScreeningRes dto = new ScreeningRes(new UUID(1L, 1L), 1L, start);
 
         Hall hall = new Hall();
         hall.setId(1L);
 
         Movie movie = new Movie();
-        movie.setId(1L);
+        movie.setId(new UUID(1L, 1L));
         movie.setDuration(120);
 
         when(hallRepository.getReferenceById(1L)).thenReturn(hall);
-        when(movieRepository.getReferenceById(1L)).thenReturn(movie);
+        when(movieRepository.getReferenceById(new UUID(1L, 1L))).thenReturn(movie);
 
         when(screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(
-                start, 1L, 1L
+                start, 1L, new UUID(1L, 1L)
         )).thenReturn(true);
 
         when(screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(
@@ -153,20 +154,20 @@ class ScreeningServiceTest {
         // given
         LocalDateTime start = LocalDateTime.now();
 
-        ScreeningRes dto = new ScreeningRes(1L, 1L, start);
+        ScreeningRes dto = new ScreeningRes(new UUID(1L, 1L), 1L, start);
 
         Hall hall = new Hall();
         hall.setId(1L);
 
         Movie movie = new Movie();
-        movie.setId(1L);
+        movie.setId(new UUID(1L, 1L));
         movie.setDuration(120);
 
         when(hallRepository.getReferenceById(1L)).thenReturn(hall);
-        when(movieRepository.getReferenceById(1L)).thenReturn(movie);
+        when(movieRepository.getReferenceById(new UUID(1L, 1L))).thenReturn(movie);
 
         when(screeningRepository.existsByStartTimeAndHall_IdAndMovie_Id(
-                start, 1L, 1L
+                start, 1L, new UUID(1L, 1L)
         )).thenReturn(false);
 
         when(screeningRepository.existsByHall_IdAndStartTimeLessThanAndEndTimeGreaterThan(

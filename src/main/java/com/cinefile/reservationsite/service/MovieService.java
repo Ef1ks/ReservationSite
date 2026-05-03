@@ -1,7 +1,9 @@
 package com.cinefile.reservationsite.service;
 
 import com.cinefile.reservationsite.dto.movie.CreateMovieRequest;
-import com.cinefile.reservationsite.dto.MovieLightDto;
+import com.cinefile.reservationsite.dto.movie.FullMovieInfoDto;
+import com.cinefile.reservationsite.dto.movie.MovieLightDto;
+import com.cinefile.reservationsite.errors.ResourceNotFoundException;
 import com.cinefile.reservationsite.model.Movie;
 import com.cinefile.reservationsite.repository.MovieRepository;
 import jakarta.persistence.EntityExistsException;
@@ -22,16 +24,16 @@ public class MovieService {
 
     @Transactional
     public void createMovie(CreateMovieRequest request) {
-        String searchKey = normalizeTitle(request.getTitle());
+        String searchKey = normalizeTitle(request.title());
         if (movieRepository.existsBySearchKey(searchKey)) {
             throw new EntityExistsException("Film już istnieje!");
         }
 
         Movie movie = Movie.builder()
-                .title(request.getTitle())
-                .posterUrl(request.getPosterUrl())
+                .title(request.title())
+                .posterUrl(request.posterUrl())
                 .searchKey(searchKey)
-                .duration(request.getDuration())
+                .duration(request.duration())
                 .build();
 
         movieRepository.save(movie);
@@ -52,5 +54,12 @@ public class MovieService {
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                 .toLowerCase()
                 .replaceAll("[^a-z0-9]", "");
+    }
+
+    public FullMovieInfoDto getMovie(String slug) {
+        Movie movie = movieRepository.findBySlug(slug)
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono filmu o podanym slugu"));
+
+        return new FullMovieInfoDto();
     }
 }
