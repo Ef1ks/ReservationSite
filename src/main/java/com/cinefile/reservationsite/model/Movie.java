@@ -19,11 +19,14 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "imdb_id", unique = true, nullable = false)
+    private String imdbId;
+
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private int duration;
+    private int duration; // Zapisywane w minutach, np. 90
 
     @Column(name = "poster_url", nullable = false)
     private String posterUrl;
@@ -31,17 +34,22 @@ public class Movie {
     @Column(name = "trailer_url")
     private String trailerUrl;
 
-    @Column(name = "description")
+    // 🚨 3. NAPRAWA OPISU: columnDefinition = "TEXT" pozwala na nielimitowaną długość tekstu (lub min. 65 tys. znaków w PostgreSQL/MySQL)
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "release_date")
     private String releaseDate;
+
     @Column(name = "director")
     private String director;
+
     @Column(name = "genre")
     private String genre;
+
     @Column(name = "language")
     private String originalLanguage;
+
     @Column(name = "imdb_rating")
     private String imdbRating;
     

@@ -1,5 +1,6 @@
 package com.cinefile.reservationsite.service;
 
+import com.cinefile.reservationsite.dto.movie.MovieDetailsDto;
 import com.cinefile.reservationsite.dto.movie.MovieSearchDto;
 import com.cinefile.reservationsite.dto.movie.OmdbSearchResponseDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,20 @@ public class OmdbService {
         if (response != null && response.search() != null) {
             return response.search();
         }
-
         return Collections.emptyList();
     }
+
+    public MovieDetailsDto getMovieDetails(String imdbId) {
+        MovieDetailsDto response = restClient.get()
+                .uri(uriBuilder -> {
+                    return uriBuilder
+                            .queryParam("apikey", apiKey)
+                            .queryParam("i", imdbId)
+                            .queryParam("plot", "full")
+                            .build();
+                })
+                .retrieve()
+                .body(MovieDetailsDto.class);
+        System.out.println(response);
+    return response;}
 }

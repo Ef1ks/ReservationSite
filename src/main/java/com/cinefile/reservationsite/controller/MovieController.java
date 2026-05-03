@@ -1,10 +1,7 @@
 package com.cinefile.reservationsite.controller;
 
 import com.cinefile.reservationsite.dto.MovieUploadResponse;
-import com.cinefile.reservationsite.dto.movie.CreateMovieRequest;
-import com.cinefile.reservationsite.dto.movie.FullMovieInfoDto;
-import com.cinefile.reservationsite.dto.movie.MovieLightDto;
-import com.cinefile.reservationsite.dto.movie.MovieSearchDto;
+import com.cinefile.reservationsite.dto.movie.*;
 import com.cinefile.reservationsite.service.MovieService;
 import com.cinefile.reservationsite.service.OmdbService;
 import jakarta.validation.Valid;
@@ -51,6 +48,11 @@ public class MovieController {
             return Collections.emptyList();
         }
         return omdbService.searchMovie(title, year);
+    }
+
+    @GetMapping("/getOmdbMovieDetails")
+    public MovieDetailsDto getOmdbMovieDetails(@RequestParam String imdbId) {
+        return omdbService.getMovieDetails(imdbId);
     }
 
 
